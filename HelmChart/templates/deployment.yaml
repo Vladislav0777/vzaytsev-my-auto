@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ .Values.registryAddress }}/{{ .Release.Name }}:{{ .Values.buildNumber }}
+          env:
+            - name: SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: cfgmap
+                  key: SERVICE_HOST
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.appPort }}
+      imagePullSecrets:
+        - name: credreg
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: bnpl-feedback
+description: A microservice for posting feedback
+type: application
+version: 0.1.0 # Chart 

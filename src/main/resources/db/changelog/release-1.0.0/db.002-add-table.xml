@@ -1,0 +1,49 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet id="1.0.0-002" author="vzaytsev@cinimex.ru">
+        <!--        createTable        -->
+        <createTable tableName="client_info">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(250)" remarks="Имя">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="varchar(250)" remarks="Фамилия">
+                <constraints nullable="true"/>
+            </column>
+            <column name="middle_name" type="varchar(250)" remarks="Отчество">
+                <constraints nullable="true"/>
+            </column>
+            <column name="birthdate" type="varchar(30)" remarks="День рождения">
+                <constraints nullable="true"/>
+            </column>
+            <column name="phone" type="varchar(30)" remarks="Телефон">
+                <constraints nullable="true"/>
+            </column>
+            <column name="email" type="varchar(500)" remarks="Электронная почта">
+                <constraints nullable="true"/>
+            </column>
+            <column name="login" type="varchar(500)" remarks="Логин">
+                <constraints nullable="true"/>
+            </column>
+            <column name="password" type="varchar(500)" remarks="Пароль">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_confirmed_email" type="varchar(250)" remarks="подтвержден ли эмейл">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <!--        addColumn consumable        -->
+        <addColumn tableName="auto">
+            <column name="client_id" type="bigint" remarks="Идентификатор клиента, ссылка на таблицу client_info">
+                <constraints nullable="false"
+                             foreignKeyName="auto_client_id_client_info_id"
+                             references="client_info(id)"
+                             deleteCascade="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

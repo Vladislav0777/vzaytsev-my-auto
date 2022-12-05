@@ -1,0 +1,134 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet id="1.0.0-000" author="vzaytsev@cinimex.ru">
+        <!--        createTable status        -->
+        <createTable tableName="consumable_status">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="consumable_code" type="varchar(2)" remarks="Код состояния расходника">
+                <constraints nullable="false"/>
+            </column>
+            <column name="consumable_name" type="varchar(60)" remarks="Имя состояния расходника">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--        createTable status_auto        -->
+        <createTable tableName="status_auto">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="status_code" type="varchar(2)" remarks="Код состояния автомобиля">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_name" type="varchar(60)" remarks="Имя состояния автомобиля">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--        sqlFile        -->
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 endDelimiter="\nGO"
+                 path="insert/v1.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <!--        createTable auto        -->
+        <createTable tableName="auto">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(300)" remarks="Имя автомобиля">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mileage" type="bigint" remarks="Пробег">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_auto_id" type="bigint" remarks="Идентификатор состояния автомобиля">
+                <constraints nullable="false"
+                             foreignKeyName="auto_status_auto_id_status_auto_id"
+                             references="status_auto(id)"
+                             deleteCascade="true"/>
+            </column>
+        </createTable>
+        <!--        createTable consumable        -->
+        <createTable tableName="consumable">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(300)" remarks="Имя расходного материала">
+                <constraints nullable="false"/>
+            </column>
+            <column name="consumable_status_id" type="bigint" remarks="Идентификатор состояния расходного материала">
+                <constraints nullable="false"
+                             foreignKeyName="consumable_consumable_status_id_consumable_status_id"
+                             references="consumable_status(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="auto_id" type="bigint" remarks="Идентификатор">
+                <constraints nullable="false"
+                             foreignKeyName="consumable_auto_id_auto_id"
+                             references="auto(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="replacement_date" type="timestamptz" remarks="Планируемая дата замены">
+                <constraints nullable="true"/>
+            </column>
+            <column name="replacement_date_fact" type="timestamptz" remarks="Фактическая дата замены">
+                <constraints nullable="true"/>
+            </column>
+            <column name="price" type="number(18,2)" remarks="Планируемая цена">
+                <constraints nullable="true"/>
+            </column>
+            <column name="price_fact" type="number(18,2)" remarks="Фактическая цена">
+                <constraints nullable="true"/>
+            </column>
+            <column name="replacement_period" type="bigint" remarks="Срок годности(в месяцах)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--        createTable consumable_history        -->
+        <createTable tableName="consumable_history">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="consumable_id" type="bigint" remarks="Идентификатор расходного материала">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)" remarks="Имя расходного материала">
+                <constraints nullable="false"/>
+            </column>
+            <column name="auto_id" type="bigint" remarks="Идентификатор состояния расходного материала">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_history" type="timestamptz" remarks="Дата сохранения в историю">
+                <constraints nullable="true"/>
+            </column>
+            <column name="consumable_status_id" type="bigint" remarks="Идентификатор состояния расходного материала">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--        createTable auto_history        -->
+        <createTable tableName="auto_history">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="auto_id" type="bigint" remarks="Идентификатор авто">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_auto_id" type="bigint" remarks="Идентификатор состояния автомобиля">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_history" type="timestamptz" remarks="Дата сохранения в историю">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
+
+
+
+
+

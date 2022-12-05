@@ -1,0 +1,9 @@
+replicaCount: 1
+
+registryAddress: artifactory.cinimex.ru/alfabnpl_docker
+
+appPort: 8080
+
+buildNumber: 1
+
+ingressHost: dev.alfa-36.vm.cmx.ru
